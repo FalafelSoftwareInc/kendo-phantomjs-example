@@ -1,4 +1,4 @@
 kendo-phantomjs-example
 =======================
 
-Example of exporting a Kendo grid without a browser using Phantomjs
+Example of exporting Kendo widgets without a browser using Phantomjs
