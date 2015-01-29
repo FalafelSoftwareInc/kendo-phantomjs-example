@@ -9,25 +9,27 @@
         var page = require("webpage").create(),
             exit,
             n = new Date().getUTCMilliseconds(),
-            output = config.tmpDir + "/ExportedListViewTest_" + n + Math.floor((Math.random() * 1000) + 1) + ".pdf",
-            createGrid;
+            output = config.tmpDir + "/ExportedListViewTest_" + n + ".pdf",
+            createListView;
 
         page.onConsoleMessage = function (msg) {
             console.log(msg);
         };
 
         page.paperSize = {
-            width: '5in',
-            height: '7in',
+            width: '8.5in',
+            height: '11in',
             margin: {
                 top: '50px',
-                left: '20px'
+                left: '20px',
+                bottom: '50px',
+                right: '20px'
             }
         };
 
         page.open("kendotestpage.html", function (status) {
 
-            page.evaluate(createGrid);
+            page.evaluate(createListView);
  
             page.evaluate(function () {
                 var body = document.body;
@@ -38,7 +40,7 @@
             exit("output file created");
         });
 
-        createGrid = function () {
+        createListView = function () {
             try {
 
                 var dataSource = new kendo.data.DataSource({
