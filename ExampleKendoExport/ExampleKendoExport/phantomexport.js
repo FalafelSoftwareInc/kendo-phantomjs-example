@@ -1,13 +1,33 @@
 ﻿(function () {
 
     var config = {},
+        mapCLArguments,
         render,
+        args,
         system = require("system"),
         fs = require("fs");
 
-    render = function (exitCallback) {
+    /**
+    * @desc mapping command line arguments
+   */
+    mapCLArguments = function () {
+        var map = {},
+            i,
+            key;
+
+        for (i = 0; i < system.args.length; i += 1) {
+            if (system.args[i].charAt(0) === "-") {
+                key = system.args[i].substr(1, i.length);
+                map[key] = system.args[i + 1];
+            }
+        }
+        return map;
+    };
+
+    render = function (params, exitCallback) {
         var page = require("webpage").create(),
             exit,
+            input = params.infile,
             n = new Date().getUTCMilliseconds(),
             output = config.tmpDir + "/ExportedListViewTest_" + n + ".pdf",
             createListView;
@@ -29,8 +49,8 @@
 
         page.open("kendotestpage.html", function (status) {
 
-            page.evaluate(createListView);
- 
+            page.evaluate(createListView, input);
+
             page.evaluate(function () {
                 var body = document.body;
                 body.style.backgroundColor = '#fff';
@@ -40,14 +60,12 @@
             exit("output file created");
         });
 
-        createListView = function () {
+        createListView = function (inputJSON) {
             try {
-
+                // parse the input data and use it to populate the dataSource
+                var inputData = JSON.parse(inputJSON);
                 var dataSource = new kendo.data.DataSource({
-                    data: [
-                        { name: "Jane Doe", age: 30 },
-                        { name: "John Doe", age: 33 }
-                    ]
+                    data: inputData
                 });
                 $("#test-listview").kendoListView({
                     dataSource: dataSource,
@@ -66,9 +84,12 @@
 
     };
 
+    //execution starts here
+    args = mapCLArguments();
+
     config.tmpDir = fs.workingDirectory + "/tmp";
 
-    render(function (msg) {
+    render(args, function (msg) {
         console.log(msg);
         setTimeout(function () {
             phantom.exit();
