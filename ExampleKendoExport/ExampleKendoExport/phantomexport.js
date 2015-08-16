@@ -62,6 +62,7 @@
 
         createListView = function (inputJSON) {
             try {
+                debugger;
                 // parse the input data and use it to populate the dataSource
                 var inputData = JSON.parse(inputJSON);
                 var dataSource = new kendo.data.DataSource({

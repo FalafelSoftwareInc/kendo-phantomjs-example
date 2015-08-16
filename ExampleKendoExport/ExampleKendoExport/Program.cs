@@ -16,8 +16,8 @@ namespace ExampleKendoExport
             Process compiler = new Process();
 
             compiler.StartInfo.FileName = "phantomjs";
-            compiler.StartInfo.Arguments = "phantomexport.js";
-            compiler.StartInfo.Arguments = "phantomexport.js -infile '" + inputString + "'";
+            //compiler.StartInfo.Arguments = "phantomexport.js";
+            compiler.StartInfo.Arguments = " --remote-debugger-port=9000 phantomexport.js -infile  '" + inputString + "'";
             
             compiler.StartInfo.CreateNoWindow = false;
             compiler.StartInfo.UseShellExecute = false;
